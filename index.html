@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10-Week Power Platform Developer (PL-400) Study Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f8fafc;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* 3D Flashcard Flip Mechanics */
+        .flashcard-container {
+            perspective: 1000px;
+        }
+        .flashcard-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flashcard-container.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        .flashcard-front, .flashcard-back {
+            backface-visibility: hidden;
+        }
+        .flashcard-back {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 h-full flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
+
+    <div class="flex h-full overflow-hidden">
+        <!-- Responsive Sidebar Desktop / Drawer Mobile -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-slate-900 text-white transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col border-r border-slate-800 shrink-0">
+            <!-- Brand Logotype -->
+            <div class="p-6 border-b border-slate-800 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="p-2 bg-indigo-600 rounded-lg">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xs font-bold tracking-tight">Power Dev Portal</h1>
+                        <p class="text-[9px] text-slate-400">PL-400 Core Path</p>
+                    </div>
+                </div>
+                <button onclick="toggleSidebarMobile()" class="md:hidden p-1 text-slate-400 hover:text-white rounded">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="flex-grow p-4 space-y-1.5 overflow-y-auto">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium bg-indigo-600 text-white transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                    <span>Dashboard</span>
+                </button>
+                <button onclick="switchTab('weekly-schedule')" id="nav-weekly-schedule" class="w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    <span>10-Week Schedule</span>
+                </button>
+                <button onclick="switchTab('interview-hub')" id="nav-interview-hub" class="w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    <span>PL-400 Interview Prep</span>
+                </button>
+                <button onclick="switchTab('flashcards')" id="nav-flashcards" class="w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 9.172V5L8 4z"/></svg>
+                    <span>Syllabus Flashcards</span>
+                </button>
+                <button onclick="switchTab('portfolio')" id="nav-portfolio" class="w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                    <span>Power Portfolio</span>
+                </button>
+            </nav>
+
+            <div class="p-4 border-t border-slate-800 bg-slate-950/50">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 to-cyan-400 flex items-center justify-center font-bold text-xs">
+                        PD
+                    </div>
+                    <div class="truncate">
+                        <p class="text-xs font-semibold truncate">Power Platform Dev</p>
+                        <p class="text-[10px] text-slate-400">PL-400 Focus</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Panel Content -->
+        <div class="flex-grow flex flex-col md:pl-64 h-full relative overflow-hidden">
+            <!-- Global Top Navigation Bar -->
+            <header class="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shrink-0">
+                <div class="flex items-center space-x-4">
+                    <button onclick="toggleSidebarMobile()" class="md:hidden p-2 text-slate-600 hover:text-slate-900 rounded-lg">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    </button>
+                    <h2 class="text-lg font-bold text-slate-900" id="page-title">Dashboard Overview</h2>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <div class="hidden sm:flex flex-col items-end">
+                        <span class="text-[11px] font-semibold text-slate-500">Syllabus Completion</span>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-32 bg-slate-100 h-2 rounded-full overflow-hidden">
+                                <div id="top-progress-fill" class="bg-indigo-600 h-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                            <span id="top-progress-pct" class="text-xs font-bold text-slate-800">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Scrollable Views Workspace -->
+            <main class="flex-grow overflow-y-auto p-6 md:p-8 space-y-8 relative">
+
+                <!-- TAB: Dashboard -->
+                <div id="tab-dashboard" class="tab-view space-y-6">
+                    <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-2xl p-6 md:p-8 text-white shadow-lg relative overflow-hidden">
+                        <div class="absolute right-0 top-0 translate-x-12 -translate-y-12 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl"></div>
+                        <div class="max-w-2xl">
+                            <span class="text-[10px] bg-indigo-500/20 text-indigo-300 font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full">Focused PL-400 Blueprint</span>
+                            <h3 class="text-2xl md:text-3xl font-bold mt-3 leading-tight">10-Week Microsoft Power Platform Developer Road</h3>
+                            <p class="text-sm text-slate-300 mt-2 font-light leading-relaxed">
+                                Complete your certification prep without D365 dependencies. Focus entirely on Dataverse, Canvas Apps, Power Fx engineering, PCF controls, TypeScript, Azure integrations, Custom Connectors, and ALM pipelines.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Core Metrics and Focus Chart -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- Stats Card 1 -->
+                            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center space-x-4">
+                                <div class="p-3 bg-indigo-50 text-indigo-600 rounded-lg">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                                </div>
+                                <div>
+                                    <span class="text-xs text-slate-500 block font-medium">Completed Objectives</span>
+                                    <span id="stat-completed-days" class="text-2xl font-extrabold text-slate-950">0 / 21</span>
+                                </div>
+                            </div>
+                            <!-- Stats Card 2 -->
+                            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center space-x-4">
+                                <div class="p-3 bg-emerald-50 text-emerald-600 rounded-lg">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                </div>
+                                <div>
+                                    <span class="text-xs text-slate-500 block font-medium">Study Timer Goal</span>
+                                    <span id="stat-timer-label" class="text-2xl font-extrabold text-slate-950">25:00</span>
+                                </div>
+                            </div>
+                            <!-- Custom sound synthesis Pomodoro Widget -->
+                            <div class="sm:col-span-2 bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="font-bold text-sm text-slate-800">Focus Helper</h4>
+                                        <p class="text-[11px] text-slate-500">Pace your study cycles with built-in synthesis notifications.</p>
+                                    </div>
+                                    <span class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">Pomodoro</span>
+                                </div>
+                                <div class="flex items-center space-x-6 mt-4">
+                                    <div class="flex items-center space-x-2">
+                                        <button id="btn-timer-toggle" onclick="toggleTimer()" class="p-3 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition shadow-sm">
+                                            <svg id="timer-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/></svg>
+                                        </button>
+                                        <button onclick="resetTimer()" class="p-3 bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-lg transition">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 15H19"/></svg>
+                                        </button>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <span id="timer-display" class="text-3xl font-extrabold tracking-tight text-slate-900">25:00</span>
+                                        <span id="timer-status" class="text-[10px] font-medium text-amber-600">Session Paused</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                            <div class="w-full flex items-center justify-between mb-2">
+                                <span class="text-xs font-bold text-slate-800 tracking-wide uppercase">Core Dev Focus</span>
+                                <span class="text-[10px] text-slate-400 font-semibold">10-Week Layout</span>
+                            </div>
+                            <div class="w-full h-40 relative flex justify-center mb-4">
+                                <canvas id="dashboardFocusChart" class="max-w-full h-full"></canvas>
+                            </div>
+                            <div class="border-t border-slate-100 pt-3 text-xs flex justify-between items-center text-slate-600">
+                                <div>
+                                    <span class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Active Status</span>
+                                    <span id="homeStatusLabel" class="font-bold text-slate-800 block mt-0.5">Foundations Initiated</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Completed</span>
+                                    <span class="block font-bold text-indigo-600"><span id="homeCompleteCount">0</span> finished</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: Weekly Schedule -->
+                <div id="tab-weekly-schedule" class="tab-view space-y-6 hidden">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div>
+                            <h3 id="planWeekTitle" class="text-lg font-bold text-slate-900">10-Week Pro Dev Road</h3>
+                            <p id="planWeekFocus" class="text-xs text-indigo-600 font-semibold mt-1">Target Domain Focus: Initializing...</p>
+                        </div>
+                        <p class="text-xs text-slate-500 max-w-sm">Deconstruct Power Platform engineering into manageable daily milestones.</p>
+                    </div>
+                    
+                    <div id="weeks-header-container" class="flex items-center space-x-2 overflow-x-auto pb-2 border-b border-slate-200 select-none">
+                        <!-- Inserted dynamically -->
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div id="days-container" class="lg:col-span-2 space-y-4">
+                            <!-- Inserted dynamically -->
+                        </div>
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4 h-fit">
+                            <h4 class="font-bold text-sm text-slate-800">Domain Tracker</h4>
+                            <div id="module-progress-checklist" class="space-y-3">
+                                <!-- Inserted dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: Interview Hub -->
+                <div id="tab-interview-hub" class="tab-view space-y-6 hidden">
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">PL-400 Technical Scenarios</h3>
+                            <p class="text-xs text-slate-500 mt-1">Practice coding challenges, integration rules, and component lifecycles.</p>
+                        </div>
+                        <div class="w-full md:w-72 relative">
+                            <input type="text" id="interview-search" oninput="filterInterviewQuestions()" placeholder="Search scenarios..." class="w-full pl-9 pr-4 py-2 text-xs border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50">
+                            <div class="absolute left-3 top-2.5 text-slate-400">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="interview-category-filters" class="flex items-center space-x-2 overflow-x-auto pb-2 border-b border-slate-200 select-none">
+                        <!-- Inserted dynamically -->
+                    </div>
+
+                    <div id="questions-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Inserted dynamically -->
+                    </div>
+                </div>
+
+                <!-- TAB: Active Flashcards -->
+                <div id="tab-flashcards" class="tab-view space-y-6 hidden">
+                    <div class="max-w-xl mx-auto flex flex-col items-center space-y-6">
+                        <div class="text-center">
+                            <h3 class="text-lg font-bold text-slate-900">Active Recall Training</h3>
+                            <p class="text-xs text-slate-500 mt-1">Self-grade your Power Platform expertise interactively.</p>
+                        </div>
+
+                        <div id="flashcard" class="flashcard-container w-full h-80 cursor-pointer" onclick="flipActiveCard()">
+                            <div class="flashcard-inner w-full h-full relative duration-500">
+                                <div class="flashcard-front absolute inset-0 bg-white border border-slate-200 rounded-2xl shadow-md p-8 flex flex-col justify-between items-center text-center">
+                                    <span id="fc-category" class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full uppercase tracking-wider">Loading...</span>
+                                    <div id="fc-question-text" class="text-sm font-semibold text-slate-800 px-4">
+                                        Question Loading...
+                                    </div>
+                                    <span class="text-[11px] text-slate-400 flex items-center space-x-1">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>
+                                        <span>Click to Reveal Answer</span>
+                                    </span>
+                                </div>
+                                <div class="flashcard-back absolute inset-0 bg-slate-900 border border-slate-800 text-white rounded-2xl shadow-xl p-8 flex flex-col justify-between">
+                                    <span class="text-[10px] font-bold text-cyan-400 bg-slate-800 px-2.5 py-1 rounded-full uppercase tracking-wider self-start">Official Syllabus Solution</span>
+                                    <div id="fc-answer-text" class="text-xs text-slate-200 overflow-y-auto max-h-44 scrollbar-thin">
+                                        Answer Loading...
+                                    </div>
+                                    <span class="text-[11px] text-slate-400 text-center flex items-center justify-center space-x-1">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>
+                                        <span>Click to Show Front</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="w-full flex items-center justify-between">
+                            <button onclick="cycleFlashcard(-1); event.stopPropagation();" class="p-2 text-slate-500 hover:text-slate-800 rounded bg-slate-100 hover:bg-slate-200 transition">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                            </button>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="gradeCard(false); event.stopPropagation();" class="px-4 py-2 text-xs font-semibold rounded-lg bg-rose-50 text-rose-600 border border-rose-100 hover:bg-rose-100 transition">Hard / Review</button>
+                                <span id="flashcard-index" class="text-xs font-mono font-bold text-slate-600 bg-slate-100 px-3 py-1.5 rounded-lg">1 / 10</span>
+                                <button onclick="gradeCard(true); event.stopPropagation();" class="px-4 py-2 text-xs font-semibold rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-100 hover:bg-emerald-100 transition">Perfect Recall</button>
+                            </div>
+                            <button onclick="cycleFlashcard(1); event.stopPropagation();" class="p-2 text-slate-500 hover:text-slate-800 rounded bg-slate-100 hover:bg-slate-200 transition">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: Portfolio Projects -->
+                <div id="tab-portfolio" class="tab-view space-y-6 hidden">
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="text-lg font-bold text-slate-900">Pure Power Sandbox Projects</h3>
+                        <p class="text-xs text-slate-500 mt-1">Develop code-first component solutions, custom APIs, and advanced integrations to build an authoritative tech portfolio.</p>
+                    </div>
+                    <div id="portfolio-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Inserted dynamically -->
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Slide-over drawer for Sandbox Lab Guides -->
+    <div id="lab-drawer" class="fixed inset-y-0 right-0 z-50 w-full max-w-xl bg-white shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col border-l border-slate-200">
+        <div class="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-900 text-white shrink-0">
+            <div>
+                <span class="text-[10px] uppercase tracking-widest text-indigo-400 font-bold font-mono">Sandbox Lab Manual</span>
+                <h3 id="drawer-title" class="text-base font-bold truncate">Lab Title</h3>
+            </div>
+            <button onclick="closeLabDrawer()" class="p-1.5 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <div class="flex-grow overflow-y-auto p-6 space-y-6 bg-slate-50" id="drawer-content">
+            <!-- Populated dynamically -->
+        </div>
+    </div>
+    <!-- Drawer backdrop -->
+    <div id="drawer-backdrop" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 hidden transition-opacity duration-300" onclick="closeLabDrawer()"></div>
+
+    <!-- Global Notification Toast Banner -->
+    <div id="notifyBanner" class="fixed top-16 left-1/2 transform -translate-x-1/2 bg-emerald-600 text-white px-6 py-3 rounded-xl shadow-xl text-xs font-semibold z-50 flex items-center space-x-2.5 opacity-0 pointer-events-none transition-all duration-300">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+        <span id="notifyBannerText">Notification</span>
+    </div>
+
+    <script>
+        // Completely restructured with deep mastery data, pits and growth paths for each PL-400 day
+        const trackerData = {
+            weeks: [
+                {
+                    title: "Week 1: M365 Ecosystem & Power Platform Fundamentals",
+                    focus: "Environments & Dataverse",
+                    days: [
+                        { 
+                            id: "w1d1", 
+                            title: "Environments, Tenant Architectures & Subscriptions", 
+                            topics: "Dev plans, Sandbox vs Production topographies, security boundaries, tenant governance setups.", 
+                            lab: "Provision and configure a secure dedicated Power Platform Developer sandbox.", 
+                            interview: "How do platform environments establish secure transactional and configuration isolation boundaries?", 
+                            flashcards: "Tenant boundary: Top-level organizational identity catalog container.<br>Developer Plan: Individual Sandbox enabling free access to Dataverse and premium connectors.", 
+                            learn: "https://learn.microsoft.com/en-us/training/paths/power-platform-fundamentals/",
+                            guide: {
+                                duration: "2 Hours",
+                                difficulty: "Beginner",
+                                objective: "Establish a tenant isolated environment mapped to the Power Platform Developer Plan.",
+                                steps: [
+                                    "Navigate to the <b>Microsoft 365 Developer Program</b> signup page and select 'Join Now'.",
+                                    "Authenticate using a personal MSA account. Fill in company demographics, select your target region, and accept terms.",
+                                    "Select <b>Instant Sandbox</b> to automatically provision an isolated M365 sandbox containing 25 preconfigured demo licenses.",
+                                    "Once your administrator credentials are created (e.g. admin@domain.onmicrosoft.com), navigate to the <b>Power Apps Developer Plan</b> signup site.",
+                                    "Submit your new credentials to provision your personal Developer sandbox environment.",
+                                    "Log into the <b>Power Platform Admin Center</b> (admin.powerplatform.microsoft.com) and verify your environment state is active."
+                                ],
+                                mastery: "Master the tenant-sandbox topography isolation boundaries. Avoid creating and testing client assets directly inside the Default environment context—this legacy practice pollutes global solution defaults.",
+                                growth: "Establishes standard sandbox governance parameters. Transitioning a dev topography safely into structured test/production pipelines ($Dev \\rightarrow Test \\rightarrow Prod$) is a foundational enterprise-scale requirement."
+                            }
+                        },
+                        { 
+                            id: "w1d2", 
+                            title: "Dataverse Architecture & Data Schema Setup", 
+                            topics: "Standard tables, system metadata structures, flat schemas, alternate keys, indexing criteria.", 
+                            lab: "Build a highly performant asset table with custom columns, key indexes, and relationships.", 
+                            interview: "Why should you build alternate keys inside Dataverse schemas when integrating with external databases?", 
+                            flashcards: "Alternate Keys: Attributes allowing record tracking via external ID maps uniquely.<br>Calculated fields: Server-rendered value formulas run synchronously upon query events.", 
+                            learn: "https://learn.microsoft.com/en-us/training/paths/work-power-apps-dataverse/",
+                            guide: {
+                                duration: "3 Hours",
+                                difficulty: "Intermediate",
+                                objective: "Create a custom Dataverse entity with relational mappings and unique index boundaries to support external API integration.",
+                                steps: [
+                                    "Open the Maker Portal (make.powerapps.com) and choose your Developer sandbox.",
+                                    "Navigate to <b>Tables</b> &rarr; select <b>New table</b> &rarr; expand <b>Set advanced properties</b>.",
+                                    "Enter 'Hardware Asset' as Display Name (Logical: <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>cr001_hardwareasset</code>). Set Primary Column to 'Asset Name' (<code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>cr001_name</code>). Save.",
+                                    "Create these custom columns:<br>• <i>Asset Tag</i> (Text, required) &rarr; <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>cr001_assettag</code><br>• <i>Purchase Date</i> (Date Only) &rarr; <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>cr001_purchasedate</code><br>• <i>Cost</i> (Currency) &rarr; <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>cr001_cost</code>",
+                                    "Click <b>Keys</b> under Schema -> click <b>New Key</b>. Name it <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>AK_HardwareAsset_AssetTag</code>.",
+                                    "Check the 'Asset Tag' column to bind it to the unique index constraints, then click Save.",
+                                    "Wait for the Key indexing status to change from <i>Pending</i> to <i>Active</i> (takes about 1-2 minutes)."
+                                ],
+                                mastery: "Understand indexing queues. Attempting to build or apply Alternate Keys on fields containing existing non-unique or null records will trigger background validation errors.",
+                                growth: "Essential for robust ETL migrations and stateless REST operations. Allows target records to be upserted cleanly using local indexes (`cr001_hardwareassets(cr001_assettag='TAG-100')`) instead of querying for platform GUIDs."
+                            }
+                        }
+                    ]
+                },
+                {
+                    title: "Week 2: Advanced Dataverse Relational Modeling & Security",
+                    focus: "Environments & Dataverse",
+                    days: [
+                        { 
+                            id: "w2d1", 
+                            title: "Complex Relational Schemes & Rollup Mappings", 
+                            topics: "One-to-Many vs Many-to-Many configurations, Rollup column limits, hierarchical queries.", 
+                            lab: "Configure custom Rollup calculations tracking child aggregate metrics asynchronously.", 
+                            interview: "How do Dataverse rollup columns calculate value attributes without inducing UI thread lockup?", 
+                            flashcards: "Rollup fields: Asynchronous background calculations aggregating related table records.<br>N:N Relations: Association tables holding entity metadata cross-mappings.", 
+                            learn: "https://learn.microsoft.com/en-us/training/paths/work-power-apps-dataverse/",
+                            guide: {
+                                duration: "3.5 Hours",
+                                difficulty: "Intermediate",
+                                objective: "Calculate parent-level metric summaries safely without inducing user interface lockups.",
+                                steps: [
+                                    "Create a second table named <b>Maintenance Log</b> (<code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>cr001_maintenancelog</code>).",
+                                    "Add a lookup column pointing to 'Hardware Asset' &rarr; this establishes a 1:N structural relationship.",
+                                    "Add a Currency column to 'Maintenance Log' named <i>Service Cost</i> (<code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>cr001_servicecost</code>).",
+                                    "Navigate back to your parent table 'Hardware Asset' and click <b>New Column</b>.",
+                                    "Set Display Name to 'Total Maintenance Cost' (<code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>cr001_totalmaintenancecost</code>). Select Data Type: <b>Currency</b>.",
+                                    "Under the <b>Behavior</b> configuration dropdown, select <b>Rollup</b>. Click Save, then click 'Open Rollup' to configure rules.",
+                                    "Set the aggregation rules:<br>• Source: <i>Hardware Asset</i><br>• Related: <i>Maintenance Logs (Hardware Asset)</i><br>• Filter: <i>Status Equals Active</i><br>• Aggregation: <i>SUM of Service Cost</i>.<br>Click Save and Close. Publish customizations."
+                                ],
+                                mastery: "Understand rollup latency. Rollup calculations run asynchronously via automatic background system jobs every 12 hours. Do not build UI dependencies that assume real-time synchronous rollup refreshes upon creation.",
+                                growth: "Minimizes calculation latency in high-volume environments. Calculating aggregates asynchronously instead of querying child relations on load dramatically improves page speed."
+                            }
+                        },
+                        { 
+                            id: "w2d2", 
+                            title: "Enterprise RBAC & Column Security Profiles", 
+                            topics: "Security roles, business units, field profiles, record sharing controls.", 
+                            lab: "Build a secure field-level security profile hiding custom proprietary details from standard users.", 
+                            interview: "Contrast native Dataverse Security Roles against specialized Column Security Profiles.", 
+                            flashcards: "Business Units: Segmented logical hierarchies grouping records.<br>Column Profile: Detailed permission attributes protecting precise column scopes.", 
+                            learn: "https://learn.microsoft.com/en-us/training/paths/work-power-apps-dataverse/",
+                            guide: {
+                                duration: "3 Hours",
+                                difficulty: "Advanced",
+                                objective: "Obfuscate sensitive operational attributes from unauthorized user roles.",
+                                steps: [
+                                    "Under the 'Hardware Asset' table, edit the 'Purchase Date' (<code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>cr001_purchasedate</code>) column properties.",
+                                    "Expand <b>Advanced options</b>, locate and check <b>Enable column security</b>. Save and publish.",
+                                    "Navigate to the <b>Power Platform Admin Center</b>, select your environment, and click <b>Settings</b>.",
+                                    "Go to <b>Users + permissions</b> &rarr; click <b>Column security profiles</b>.",
+                                    "Select <b>New Profile</b>. Name it 'Secure Procurement Data Profile' and click Save.",
+                                    "Open the profile, click the <b>Users</b> tab, and add your test developer account.",
+                                    "Go to the <b>Column Permissions</b> tab, locate <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>cr001_purchasedate</code>, and configure: <i>Read: Allowed, Create: Allowed, Update: Allowed</i>. Save."
+                                ],
+                                mastery: "Column Security overrides Security Roles. Forgetting that Column Security applies globally can cause custom backend plugins or cloud flows running under the user context to fail with 'Access Denied' exceptions.",
+                                growth: "Mandatory for handling sensitive data under corporate compliance tracks (e.g., GDPR, HIPAA). Secures specific variables while maintaining general table visibility."
+                            }
+                        }
+                    ]
+                },
+                {
+                    title: "Week 3: Power Apps Canvas Apps - Foundations & Power Fx",
+                    focus: "Low-Code Apps & Logic",
+                    days: [
+                        { 
+                            id: "w3d1", 
+                            title: "Responsive Layout Designing & Client Controls", 
+                            topics: "Container controls, screen-width adaptations, dynamic themes, formula-driven controls.", 
+                            lab: "Develop a highly responsive dual-screen canvas interface from an empty layout grid.", 
+                            interview: "Describe best practices for implementing responsive UI elements without hardcoding dimensions.", 
+                            flashcards: "Parent.Width: Relative parameter adapting controls dynamically.<br>App.OnStart: App startup script initializing global configurations.", 
+                            learn: "https://learn.microsoft.com/en-us/training/paths/create-canvas-app/",
+                            guide: {
+                                duration: "4 Hours",
+                                difficulty: "Intermediate",
+                                objective: "Design screen layouts using flexible container constraints to eliminate fixed coordinate dependency.",
+                                steps: [
+                                    "Log into make.powerapps.com and create a blank Canvas App using the <b>Tablet</b> orientation layout.",
+                                    "Select Screen1 in tree view. Click Insert &rarr; select <b>Horizontal container</b>.",
+                                    "Set container dimensions:<br>• X: <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>0</code>, Y: <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>0</code><br>• Width: <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>Parent.Width</code><br>• Height: <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>Parent.Height</code>",
+                                    "Inside this container, insert two <b>Vertical containers</b> from the layout menu.",
+                                    "Set Left Vertical Container (Menu panel): <i>Fill portions</i> &rarr; <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>1</code>, toggle <i>Flexible width</i> to On.",
+                                    "Set Right Vertical Container (Content panel): <i>Fill portions</i> &rarr; <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>2</code>, toggle <i>Flexible width</i> to On.",
+                                    "Insert a gallery or table into the Left Container to verify that components adapt smoothly when changing the device aspect ratio in previews."
+                                ],
+                                mastery: "Master layout constraints. Avoid inserting absolute coordinates (e.g., hardcoded width `1024`) inside flexible containers, as this breaks parent-relative positioning loops.",
+                                growth: "Significantly reduces front-end overhead. Building a single responsive app template eliminates the need to maintain separate tablet and mobile layouts."
+                            }
+                        },
+                        { 
+                            id: "w3d2", 
+                            title: "Power Fx Formulations & Query Delegation Boundaries", 
+                            topics: "Collections, custom context variables, delegated functions, optimizing in-memory buffers.", 
+                            lab: "Construct a search filter resolving multi-parameter expressions fully on the server-side.", 
+                            interview: "Explain the absolute impact of non-delegable warning indicators on large production data sources.", 
+                            flashcards: "Delegation: Offloading computations to native backend servers.<br>Patch: Direct transactional formula updating targeted records asynchronously.", 
+                            learn: "https://learn.microsoft.com/en-us/training/paths/create-canvas-app/",
+                            guide: {
+                                duration: "4 Hours",
+                                difficulty: "Advanced",
+                                objective: "Build database queries that execute directly on the Dataverse server instead of pulling records into memory.",
+                                steps: [
+                                    "Insert a <b>Text input</b> control onto Screen1, naming it <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>txtSearchInput</code>.",
+                                    "Insert a <b>Combo box</b> control named <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>cmbStatusFilter</code>, binding its Items to the Choices of your custom table's status column.",
+                                    "Insert a <b>Gallery</b> to display your assets.",
+                                    "Write the following delegable Power Fx query directly into the gallery's <b>Items</b> formula parameter:<br><pre class='bg-slate-900 text-green-400 p-2.5 rounded font-mono text-xs mt-1.5 overflow-x-auto'>Filter(\n    'Hardware Assets',\n    (IsBlank(txtSearchInput.Text) || StartsWith('Asset Name', txtSearchInput.Text)) &&\n    (IsBlank(cmbStatusFilter.Selected.Value) || 'Asset Status' = cmbStatusFilter.Selected.Value)\n)</pre>",
+                                    "Verify that no yellow triangle warning is present. This guarantees that your query is executed on the server, ensuring rapid load times as your records grow."
+                                ],
+                                mastery: "Be strict with delegation limits. While an application in dev may run smoothly, deploying non-delegable queries to production will cap local in-memory processing at a maximum of 2,000 records, leading to silently lost data queries.",
+                                growth: "Key for enterprise-grade deployments. Properly structured queries keep screen load times lightning-fast even as Dataverse tables grow into millions of records."
+                            }
+                        }
+                    ]
+                },
+                {
+                    title: "Week 4: Advanced Canvas Apps & Custom Components",
+                    focus: "Low-Code Apps & Logic",
+                    days: [
+                        { 
+                            id: "w4d1", 
+                            title: "Canvas Component Libraries & Custom Themes", 
+                            topics: "Reusable controls, input/output properties, global component libraries, unified themes.", 
+                            lab: "Create a custom header navigation component and deploy it across multiple screens.", 
+                            interview: "How do input and output custom properties enable state communication inside Canvas Components?", 
+                            flashcards: "Component: Custom reusable control asset blocks.<br>Output Property: Parameter passing component internal data back to host app containers.", 
+                            learn: "https://learn.microsoft.com/en-us/training/paths/create-canvas-app/",
+                            guide: {
+                                duration: "3 Hours",
+                                difficulty: "Intermediate",
+                                objective: "Build reusable application UI controls with input and output property mappings.",
+                                steps: [
+                                    "On the Apps navigation tab in the Maker Portal, select the <b>Component libraries</b> page. Click <b>New component library</b>.",
+                                    "Name the asset library 'ContosoSharedUI' and click Create.",
+                                    "Inside the designer, rename the default Component1 to 'HeaderControl'. Set dimensions to Width: <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>1366</code> and Height: <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>80</code>.",
+                                    "Click <b>New custom property</b> in the properties panel:<br>• Display: <i>HeaderTitle</i>, Property Name: <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>HeaderTitle</i><br>• Type: <i>Input</i>, Data Type: <i>Text</i>.",
+                                    "Insert a <b>Label</b> control inside the Header container, and assign its Text property to: <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>Parent.HeaderTitle</code>.",
+                                    "Save and publish. Open your Canvas App, expand the 'Insert' (+) tool menu, select 'Get more components', and import your custom header component."
+                                ],
+                                mastery: "Understand reference limits. If you customize properties locally on an imported library control instance, you will break the inheritance connection back to the central library file, blocking future updates.",
+                                growth: "Drastically accelerates corporate delivery timelines. Standardizing reusable control components can speed up organizational development by up to $300\\%$."
+                            }
+                        },
+                        { 
+                            id: "w4d2", 
+                            title: "Power Apps Component Framework (PCF) Tooling Prep", 
+                            topics: "npm, node.js requirements, Yeoman scaffolds, pac CLI utilities, local sandbox runtimes.", 
+                            lab: "Set up the local PCF workspace using standard terminal command lines.", 
+                            interview: "Why does Microsoft advocate PCF development over legacy iframe injection configurations?", 
+                            flashcards: "pac cli: Primary developer toolkit for component initialization.<br>Manifest file: XML document defining PCF property properties and resources.", 
+                            learn: "https://learn.microsoft.com/en-us/training/paths/pcf-create-component/",
+                            guide: {
+                                duration: "2 Hours",
+                                difficulty: "Beginner",
+                                objective: "Establish your development dependencies and scaffold your first custom code control.",
+                                steps: [
+                                    "Download and install <b>Node.js LTSC</b>. Confirm configurations are correct by checking npm/node version properties in a terminal.",
+                                    "Install the Power Platform CLI globally by executing this command:<br><pre class='bg-slate-900 text-green-400 p-2.5 rounded font-mono text-xs mt-1.5 overflow-x-auto'>npm install -g powerplatform-cli</pre>",
+                                    "Verify installations by typing:<br><pre class='bg-slate-900 text-green-400 p-2.5 rounded font-mono text-xs mt-1.5 overflow-x-auto'>pac help</pre>",
+                                    "Create your project folder and run initialization:<br><pre class='bg-slate-900 text-green-400 p-2.5 rounded font-mono text-xs mt-1.5 overflow-x-auto'>mkdir SliderComponent\ncd SliderComponent\npac pcf init --namespace ContosoDevelopers --name VolumeSliderControl --template field\nnpm install</pre>",
+                                    "Launch Visual Studio Code to view the generated scaffolding files."
+                                ],
+                                mastery: "Pay close attention to version dependencies. Always verify NPM package versions and ensure your global Node installation matches Power Platform CLI requirements to avoid compiler faults during the initialization steps.",
+                                growth: "The primary gateway to professional, code-first extensibility. Mastering the CLI tools elevates your status from a low-code maker to a pro-code systems engineer."
+                            }
+                        }
+                    ]
+                },
+                {
+                    title: "Week 5: Model-Driven Apps & Power Pages",
+                    focus: "Low-Code Apps & Logic",
+                    days: [
+                        { 
+                            id: "w5d1", 
+                            title: "Model UI Customization & Business Process Flows", 
+                            topics: "Form XML, system views, business process stages, command bar customized actions.", 
+                            lab: "Construct an onboarding sitemap containing multi-stage Business Process Flows.", 
+                            interview: "When should you deploy client-side JavaScript versus Business Process Flows in Model-Driven UI?", 
+                            flashcards: "BPF: Guides users through step-by-step visual procedural milestones.<br>System Views: Standard queries defining data layout grids inside tables.", 
+                            learn: "https://learn.microsoft.com/en-us/training/paths/create-model-driven-app/",
+                            guide: {
+                                duration: "4 Hours",
+                                difficulty: "Intermediate",
+                                objective: "Coordinate manual process stages visually on a structured table form.",
+                                steps: [
+                                    "Open your development solution, click <b>New</b> &rarr; <b>Automation</b> &rarr; <b>Process</b> &rarr; <b>Business process flow</b>.",
+                                    "Name it 'Asset Onboarding Flow' and bind it to your custom Hardware Asset table.",
+                                    "In the flow designer, create three sequential stages:<br>• <i>Stage 1: Registration</i> (add steps for Asset Name, Purchase Date)<br>• <i>Stage 2: Operational Assignment</i> (add status and lookup steps)<br>• <i>Stage 3: Procurement Review</i> (add cost steps).",
+                                    "Click Save, then click <b>Activate</b> to enable the flow.",
+                                    "Open your Model-Driven App in App Designer, click Navigation &rarr; add Table &rarr; select 'Hardware Asset'.",
+                                    "Verify that your Business Process Flow is available. Save and publish."
+                                ],
+                                mastery: "Keep forms uncluttered. Standardize visibility and validations using declarative Business Rules where possible. Only resort to JavaScript Form XML scripting for complex API calls to keep form load times fast.",
+                                growth: "Improves data accuracy. Business Process Flows ensure users follow standard operating procedures, minimizing data entry errors."
+                            }
+                        },
+                        { 
+                            id: "w5d2", 
+                            title: "Power Pages Architecture & External Liquid Templates", 
+                            topics: "Portal configurations, Liquid language, portal security, custom Web Templates.", 
+                            lab: "Build an external partner portal page displaying read-only Dataverse table inputs securely.", 
+                            interview: "What security measures are required to expose Dataverse tables securely to anonymous external portal users?", 
+                            flashcards: "Liquid: Server-side templating engine rendering dynamic portal data.<br>Table Permissions: Security records mapping explicit portal contact permissions.", 
+                            learn: "https://learn.microsoft.com/en-us/training/paths/create-model-driven-app/",
+                            guide: {
+                                duration: "4 Hours",
+                                difficulty: "Advanced",
+                                objective: "Setup access controls to securely display tables to authenticated external web contacts.",
+                                steps: [
+                                    "Log into the Power Pages Design Studio and choose your portal.",
+                                    "Select the <b>Set up</b> tab in the left-hand tool pane, then choose <b>Table permissions</b>.",
+                                    "Click <b>New permission</b>. Enter 'Read Shared Assets' as Name.",
+                                    "Select your custom 'Hardware Asset' table from the Table drop-down list.",
+                                    "Set <b>Access Type</b> to 'Contact access' (which restricts visibility based on the contact record of the authenticated user).",
+                                    "Check the <b>Read</b> checkbox in the privileges list. Leave create, write, and delete permissions blank.",
+                                    "Assign this permission to the 'Authenticated Users' Web Role. Save and preview."
+                                ],
+                                mastery: "Enforce zero-trust principles. Never output raw data fields to external templates without first applying explicit Contact-scoped Table Permissions.",
+                                growth: "Enables public-facing enterprise integrations. Allows customers and vendors to securely interact with internal Dataverse data in real-time."
+                            }
+                        }
+                    ]
+                },
+                {
+                    title: "Week 6: Power Apps Component Framework (PCF) Mastery",
+                    focus: "Pro-Code Extensions (PCF)",
+                    days: [
+                        { 
+                            id: "w6d1", 
+                            title: "TypeScript Component Architecture & Manifests", 
+                            topics: "Control manifest parameters, typescript logic cycles, control initialization, rendering loops.", 
+                            lab: "Code a specialized slider PCF component utilizing modern Typescript libraries.", 
+                            interview: "Explain the significance of the updateView and init methods in the PCF control lifecycle.", 
+                            flashcards: "updateView: Rendering loop fired automatically upon parent state changes.<br>TypeScript: Standard pro-code language required for native PCF structures.", 
+                            learn: "https://learn.microsoft.com/en-us/training/paths/extend-power-platform-user-experience/",
+                            guide: {
+                                duration: "5 Hours",
+                                difficulty: "Advanced",
+                                objective: "Write custom UI rendering logic in TypeScript using PCF manifest boundaries.",
+                                steps: [
+                                    "Open <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>ControlManifest.Input.xml</code>. Inside the properties element block, declare our input field parameters:<br><pre class='bg-slate-900 text-green-400 p-2.5 rounded font-mono text-xs mt-1.5 overflow-x-auto'>&lt;property name=\"sliderValue\" display-name-key=\"Value Property\" of-type=\"Whole.None\" usage=\"bound\" required=\"true\" /&gt;</pre>",
+                                    "Open <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>index.ts</code>. Add private variable references to the top of your class wrapper:<br><pre class='bg-slate-900 text-green-400 p-2.5 rounded font-mono text-xs mt-1.5 overflow-x-auto'>private _container: HTMLDivElement;\nprivate _sliderElement: HTMLInputElement;\nprivate _valueLabel: HTMLLabelElement;\nprivate _context: ComponentFramework.Context&lt;IInputs&gt;;\nprivate _notifyOutputChanged: () =&gt; void;</pre>",
+                                    "Inside the <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>init()</code> function, initialize your HTML components:<br><pre class='bg-slate-900 text-green-400 p-2.5 rounded font-mono text-xs mt-1.5 overflow-x-auto'>this._container = document.createElement(\"div\");\nthis._sliderElement = document.createElement(\"input\");\nthis._sliderElement.type = \"range\";\nthis._sliderElement.min = \"0\";\nthis._sliderElement.max = \"100\";\nthis._sliderElement.value = context.parameters.sliderValue.raw ? context.parameters.sliderValue.raw.toString() : \"0\";\nthis._sliderElement.addEventListener(\"input\", this.onSliderChange.bind(this));\nthis._valueLabel = document.createElement(\"label\");\nthis._valueLabel.innerText = this._sliderElement.value;\nthis._container.appendChild(this._sliderElement);\nthis._container.appendChild(this._valueLabel);\ncontainer.appendChild(this._container);\nthis._context = context;\nthis._notifyOutputChanged = notifyOutputChanged;</pre>",
+                                    "Write the slide handler inside your class:<br><pre class='bg-slate-900 text-green-400 p-2.5 rounded font-mono text-xs mt-1.5 overflow-x-auto'>private onSliderChange(event: Event): void {\n    this._valueLabel.innerText = this._sliderElement.value;\n    this._notifyOutputChanged();\n}</pre>",
+                                    "Update the <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>getOutputs()</code> return object properties:<br><pre class='bg-slate-900 text-green-400 p-2.5 rounded font-mono text-xs mt-1.5 overflow-x-auto'>return {\n    sliderValue: parseInt(this._sliderElement.value)\n};</pre>",
+                                    "Test your control locally by running: <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>npm start</code>."
+                                ],
+                                mastery: "Avoid expensive render cycles. Writing heavy DOM manipulation loops inside the `updateView()` callback will block the UI thread, causing lagging inputs and poor responsiveness.",
+                                growth: "Enables highly customized, pixel-perfect user interface controls (e.g., interactive maps, advanced grids) embedded natively inside standard forms."
+                            }
+                        },
+                        { 
+                            id: "w6d2", 
+                            title: "PCF Testing, React Integration & Solution Packing", 
+                            topics: "React wrapper components, local sandbox testing, packaging components into Dataverse solutions.", 
+                            lab: "Integrate a React component into your PCF control and compile it as a managed solution zip.", 
+                            interview: "How does local harness debugging help test PCF controls prior to Dataverse environment imports?", 
+                            flashcards: "Local Harness: Local terminal test environment running custom controls offline.<br>Solution Packager: Zip compression packaging PCF resources for solution delivery.", 
+                            learn: "https://learn.microsoft.com/en-us/training/paths/extend-power-platform-user-experience/",
+                            guide: {
+                                duration: "4.5 Hours",
+                                difficulty: "Advanced",
+                                objective: "Inject React components into PCF controls and package them into an importable ZIP file.",
+                                steps: [
+                                    "Install React dependencies within your PCF folder:<br><pre class='bg-slate-900 text-green-400 p-2.5 rounded font-mono text-xs mt-1.5 overflow-x-auto'>npm install react react-dom\nnpm install --save-dev @types/react @types/react-dom</pre>",
+                                    "Create a new sibling directory named <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>pcf-solution-wrapper</code>. In your terminal, navigate inside this folder.",
+                                    "Initialize the Solution package settings using pac CLI:<br><pre class='bg-slate-900 text-green-400 p-2.5 rounded font-mono text-xs mt-1.5 overflow-x-auto'>pac solution init --publisher ContosoPublisher --prefix cr001</pre>",
+                                    "Link your solution project to your PCF custom control path:<br><pre class='bg-slate-900 text-green-400 p-2.5 rounded font-mono text-xs mt-1.5 overflow-x-auto'>pac solution add-reference --path ../SliderComponent</pre>",
+                                    "Build the solution, which packages your control into a deployment ZIP file:<br><pre class='bg-slate-900 text-green-400 p-2.5 rounded font-mono text-xs mt-1.5 overflow-x-auto'>msbuild /t:build /p:Configuration=Release\n# Or alternatively:\ndotnet build --configuration Release</pre>",
+                                    "Navigate to the <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>bin/Release</code> folder to retrieve your packaged managed solution ZIP."
+                                ],
+                                mastery: "Keep React state clean. Do not mix direct jQuery/document DOM manipulation with React state updates, as this corrupts virtual DOM synchronization loops.",
+                                growth: "Key for enterprise component delivery. Packaging custom code assets into managed solution zips allows them to be deployed, tracked, and versioned across different environments."
+                            }
+                        }
+                    ]
+                },
+                {
+                    title: "Week 7: Advanced Cloud Flows & Azure Integrations",
+                    focus: "Integrations & Automation",
+                    days: [
+                        { 
+                            id: "w7d1", 
+                            title: "Cloud Flow Design, Expressions & Error Handling", 
+                            topics: "Action throttling limits, JSON serialization, Try-Catch boundary loops, dynamic scopes.", 
+                            lab: "Design a fault-tolerant cloud flow capturing JSON exceptions with custom email alerts.", 
+                            interview: "Detail how to implement Try-Catch error management blocks inside Power Automate.", 
+                            flashcards: "Scope Control: Structural containers allowing collective error tracing.<br>Trigger: Initiating action event starting flow execution sequences.", 
+                            learn: "https://learn.microsoft.com/en-us/training/paths/use-power-automate/",
+                            guide: {
+                                duration: "3.5 Hours",
+                                difficulty: "Intermediate",
+                                objective: "Configure error handling inside Power Automate using declarative scope boundaries.",
+                                steps: [
+                                    "Log into the Power Automate Portal and create an Instant Cloud Flow.",
+                                    "Add a <b>Scope</b> action and rename it to 'Scope - Try'. Place all your primary API actions inside this scope block.",
+                                    "Add a second <b>Scope</b> action directly below the first, and rename it to 'Scope - Catch'.",
+                                    "Click the ellipsis menu (...) on the 'Scope - Catch' header card and select <b>Configure run after</b>.",
+                                    "Uncheck 'is successful', and check <b>has failed</b>, <b>is skipped</b>, and <b>has timed out</b>.",
+                                    "Inside the Catch scope, add a <b>Send an email notification (V2)</b> action.",
+                                    "Use the following expressions in the email body to capture error details:<br>• Name: <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>@actions('Scope_-_Try')?['outputs']?['body']?['error']?['message']</code><br>• Code: <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>@actions('Scope_-_Try')?['outputs']?['statusCode']</code>"
+                                ],
+                                mastery: "Avoid silent failures. Swallowing exceptions inside Try-Catch block loops without writing alert notifications to monitoring or logging services leaves support teams blind to runtime errors.",
+                                growth: "Essential for robust integration flows. Building self-healing, fault-tolerant workflows ensures transaction processing remains stable over fluctuating network conditions."
+                            }
+                        },
+                        { 
+                            id: "w7d2", 
+                            title: "Azure Service Bus, Event Grid & Webhooks", 
+                            topics: "Azure Service Bus triggers, webhook payloads, SAS authorization, Event Grid routing.", 
+                            lab: "Build a flow triggering on Event Grid actions to sync file data directly.", 
+                            interview: "When would you choose Azure Service Bus over standard webhooks for Dataverse integrations?", 
+                            flashcards: "Service Bus: Durable queuing architecture managing async message transactions.<br>Webhook: Simple HTTP POST request dispatching JSON payloads to endpoints.", 
+                            learn: "https://learn.microsoft.com/en-us/training/paths/use-power-automate/",
+                            guide: {
+                                duration: "5 Hours",
+                                difficulty: "Advanced",
+                                objective: "Export real-time table transaction messages directly to Azure Service Bus queues.",
+                                steps: [
+                                    "Log into the Azure Portal, create an Azure Service Bus Namespace, and add a queue named <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>dataverse-events</code>.",
+                                    "Create a Shared Access Policy with Send privileges, and copy the primary connection string.",
+                                    "Download and launch the Microsoft <b>Plugin Registration Tool</b>.",
+                                    "Click Create New Connection, authenticate with your developer sandbox, and click Login.",
+                                    "Click Register &rarr; select <b>Register New Service Endpoint</b>.",
+                                    "Paste your Service Bus connection string &rarr; the tool will parse connection parameters automatically.",
+                                    "Right-click your new Service Endpoint and select <b>Register New Step</b>.",
+                                    "Configure the step trigger properties:<br>• Message: <i>Create</i>, Primary Entity: <i>cr001_hardwareasset</i><br>• Stage: <i>PostOperation</i>, Mode: <i>Asynchronous</i>.<br>Click Register to activate real-time queue messages."
+                                ],
+                                mastery: "Understand transaction modes. Avoid registering synchronous steps (Mode: Synchronous) on service bus endpoints—blocking web service requests will stall browser saving cycles if the target queue experiences latency.",
+                                growth: "Enables loose coupling in enterprise architectures. Pushing events to Service Bus queues safely separates Dataverse transactions from external downstream APIs."
+                            }
+                        }
+                    ]
+                },
+                {
+                    title: "Week 8: Custom Connectors & Power Platform Web API",
+                    focus: "Integrations & Automation",
+                    days: [
+                        { 
+                            id: "w8d1", 
+                            title: "Custom Connector Design, OpenAPI & OAuth 2.0", 
+                            topics: "Swagger definitions, custom actions, API Keys, Azure AD authentication configurations.", 
+                            lab: "Develop a custom connector to query a public API securely using custom request headers.", 
+                            interview: "What role does the OpenAPI specification play when publishing custom platform connectors?", 
+                            flashcards: "OpenAPI Specification: Structured JSON/YAML document defining REST endpoints.<br>Custom Connector: Wrapper mapping external web APIs to flow actions.", 
+                            learn: "https://learn.microsoft.com/en-us/training/paths/integrate-power-platform-web-api/",
+                            guide: {
+                                duration: "4 Hours",
+                                difficulty: "Advanced",
+                                objective: "Wrap an external HTTP API inside a secure, custom low-code connector.",
+                                steps: [
+                                    "In the Maker Portal, navigate to <b>Custom connectors</b> &rarr; click New &rarr; select <b>Create from blank</b>.",
+                                    "Enter 'WeatherServiceConnector' as Name.",
+                                    "Under the General Information tab, set: <i>Scheme: HTTPS, Host: api.openweathermap.org, Base URL: /data/2.5/</i>.",
+                                    "Go to the Security tab and select <b>API Key</b> as authentication type:<br>• Label: <i>API Token</i>, Parameter: <i>appid</i>, Location: <i>Query</i>.",
+                                    "Go to the Definition tab, click <b>New action</b>, and set Operation ID to <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>GetCurrentWeather</code>.",
+                                    "Under Request, click <b>Import from sample</b>. Set method to GET and paste: <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>https://api.openweathermap.org/data/2.5/weather?q=London</code>. Click Import.",
+                                    "Click <b>Create connector</b>, navigate to the Test tab, create a new connection, and test the action."
+                                ],
+                                mastery: "Never leak credentials. Avoid hardcoding API keys inside public OpenAPI Swagger definitions. Always configure parameters using dynamic security headers or OAuth tokens.",
+                                growth: "Unlocks secure legacy integrations. Wrapping custom REST APIs inside custom connectors allows citizen developers to interact with legacy company systems safely."
+                            }
+                        },
+                        { 
+                            id: "w8d2", 
+                            title: "Executing Operations via Dataverse Web API", 
+                            topics: "REST APIs, OData v4 conventions, batch requests, authenticating from external apps.", 
+                            lab: "Author custom JavaScript requesting batch Dataverse records using standard fetch APIs.", 
+                            interview: "Describe OData v4 query parameters used to optimize REST payloads from Dataverse.", 
+                            flashcards: "Dataverse Web API: RESTful programmatic entry point to relational schemas.<br>Batch Request: Multiple operations packed inside a single transactional HTTP call.", 
+                            learn: "https://learn.microsoft.com/en-us/training/paths/integrate-power-platform-web-api/",
+                            guide: {
+                                duration: "3 Hours",
+                                difficulty: "Advanced",
+                                objective: "Retrieve, filter, and structure raw Dataverse records programmatically from client-side Web Resources.",
+                                steps: [
+                                    "Create a Javascript Web Resource file named <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>cr001_AssetApiHelper.js</code>.",
+                                    "Implement the following Web API fetch request logic to retrieve assets with a cost greater than $1,000:<br><pre class='bg-slate-900 text-green-400 p-2.5 rounded font-mono text-xs mt-1.5 overflow-x-auto'>function retrieveExpensiveAssets() {\n    var globalContext = Xrm.Utility.getGlobalContext();\n    var clientUrl = globalContext.getClientUrl();\n    var webApiUrl = clientUrl + \"/api/data/v9.2/\";\n    var query = \"cr001_hardwareassets?$select=cr001_name,cr001_cost,cr001_assettag&amp;$filter=cr001_cost gte 1000\";\n    \n    fetch(webApiUrl + query, {\n        method: \"GET\",\n        headers: {\n            \"OData-MaxVersion\": \"4.0\",\n            \"OData-Version\": \"4.0\",\n            \"Accept\": \"application/json\",\n            \"Content-Type\": \"application/json; charset=utf-8\",\n            \"Prefer\": \"odata.include-annotations=\\\"*\\\"\"\n        }\n    })\n    .then(res =&gt; res.json())\n    .then(data =&gt; {\n        data.value.forEach(asset =&gt; {\n            console.log(`Asset: \${asset.cr001_name} | Cost: \${asset.cr001_cost}`);\n        });\n    })\n    .catch(err =&gt; console.error(\"Request failed: \", err));\n}</pre>",
+                                    "Upload the file to Dataverse as a JavaScript Web Resource."
+                                ],
+                                mastery: "Optimize payload sizes. Avoid over-fetching columns (`$select=*`). Always declare a precise list of attributes using the `$select` parameter to prevent database network throttling.",
+                                growth: "Key for lightweight UI performance. Fetching structured JSON collections via direct client-side requests avoids the overhead of loading full server-rendered form states."
+                            }
+                        }
+                    ]
+                },
+                {
+                    title: "Week 9: Intelligent Automation & RPA",
+                    focus: "Integrations & Automation",
+                    days: [
+                        { 
+                            id: "w9d1", 
+                            title: "Power Automate Desktop & RPA Flows", 
+                            topics: "RPA strategies, attended vs unattended runs, variable mappings, desktop UI selectors.", 
+                            lab: "Build a desktop flow scraping structured tables from a legacy Windows application.", 
+                            interview: "Differentiate between attended and unattended RPA run configurations.", 
+                            flashcards: "Attended RPA: Bot executing alongside active human desktop sessions.<br>Unattended RPA: Background automation running isolated inside virtual machines.", 
+                            learn: "https://learn.microsoft.com/en-us/training/paths/pad-develop-flows/",
+                            guide: {
+                                duration: "4 Hours",
+                                difficulty: "Intermediate",
+                                objective: "Automate keyboard and mouse UI interactions inside thick-client legacy windows applications.",
+                                steps: [
+                                    "Launch the <b>Power Automate Desktop</b> application and select <b>New Flow</b>. Name it 'Legacy Asset Extractor'.",
+                                    "In the Actions panel, search for and double-click <b>Run application</b>. Set the file path to your legacy application or <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>notepad.exe</code> for testing.",
+                                    "Click the <b>UI Recorder</b> button on the top menu to open the recording panel.",
+                                    "Hover over UI elements and use <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>Ctrl + Left Click</code> to capture selectors.",
+                                    "Record your interaction steps, then click <b>Finish</b> to generate the corresponding action blocks.",
+                                    "Add a <b>Close application</b> action block at the end of the flow. Save and run the flow to verify."
+                                ],
+                                mastery: "Use robust selectors. Avoid relying on absolute XY screen coordinates. Absolute positioning causes automation steps to fail when screen resolutions or application layouts change.",
+                                growth: "Extends automation to legacy environments. Automating operations on older desktop software that lacks modern APIs saves valuable manual data-entry hours."
+                            }
+                        },
+                        { 
+                            id: "w9d2", 
+                            title: "AI Builder Models & Cognitive Services Integration", 
+                            topics: "Form Processing models, sentiment analysis, custom AI templates, cognitive triggers.", 
+                            lab: "Deploy an AI Builder document model to parse and save invoice fields automatically.", 
+                            interview: "How does AI Builder leverage pre-trained Azure Cognitive Services models?", 
+                            flashcards: "AI Builder: Low-code AI integration capability layer.<br>Object Detection: Pre-trained model identifying specific visual elements within pictures.", 
+                            learn: "https://learn.microsoft.com/en-us/training/paths/pad-develop-flows/",
+                            guide: {
+                                duration: "4 Hours",
+                                difficulty: "Intermediate",
+                                objective: "Train and deploy a machine learning model to parse and categorize document layouts.",
+                                steps: [
+                                    "In the Maker Portal, expand the <b>AI Hub</b> menu and click <b>AI models</b>.",
+                                    "Select the <b>Document Processing</b> custom model template.",
+                                    "Define the fields you want to extract: <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>Invoice Number</code>, <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>Due Date</code>, <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>Total Amount</code>.",
+                                    "Create a document collection container and upload 5 sample invoice files.",
+                                    "Tag your documents by drawing bounding boxes around field values and mapping them to your defined fields.",
+                                    "Click <b>Train</b>, wait for training to complete, and click <b>Publish</b> to activate your model."
+                                ],
+                                mastery: "Ensure high-quality training data. Uploading blurry or inconsistently structured documents during model training will degrade prediction accuracy and return parsing errors.",
+                                growth: "Powers cognitive workflows. Automating unstructured document ingestion (e.g., invoices, support tickets) replaces manual paperwork with rapid, automated database routing."
+                            }
+                        }
+                    ]
+                },
+                {
+                    title: "Week 10: ALM, CoE Governance & Exam Simulation",
+                    focus: "ALM & Exam Prep",
+                    days: [
+                        { 
+                            id: "w10d1", 
+                            title: "Pipelines, Azure DevOps & GitHub Actions", 
+                            topics: "Power Platform Pipelines, build automation tasks, automated export/import, packing solutions.", 
+                            lab: "Configure an automated platform pipeline transporting managed solutions to target sandboxes.", 
+                            interview: "How do environmental variables isolate connection details during automated ALM deployments?", 
+                            flashcards: "Pipelines: Native, in-product deployment orchestrators.<br>Build Tools: Automated tasks running solution exports, unpacks, and package checks.", 
+                            learn: "https://learn.microsoft.com/en-us/training/paths/pl-400-alm-governance/",
+                            guide: {
+                                duration: "5 Hours",
+                                difficulty: "Advanced",
+                                objective: "Set up a secure pipeline to automate deployment of solutions between sandbox environments.",
+                                steps: [
+                                    "Identify two sandbox environments in your tenant: <i>Development Environment</i> and <i>Test Environment</i>.",
+                                    "Navigate to the Power Platform Admin Center and select your target administration workspace.",
+                                    "Click <b>Pipelines</b>, then select <b>Create pipeline</b>. Name it 'Procurement Solution Deployer'.",
+                                    "Define Environments: Link both your Development and Test sandboxes to this pipeline.",
+                                    "Define Stages: Add a deployment stage called 'Deploy to Test' and target your Test Environment.",
+                                    "Navigate back to the Maker Portal inside your Development Environment, go to <b>Solutions</b>, and open your custom solution.",
+                                    "Click the <b>Pipelines</b> tab in the left-hand panel, click Deploy, and verify that validation checks pass."
+                                ],
+                                mastery: "Clean your dependencies. Always check your solution dependencies using the Solution Checker before running pipelines to prevent deployment failures in downstream environments.",
+                                growth: "Underpins enterprise ALM strategy. Replacing manual solution handling with automated, source-controlled CI/CD pipelines ensures reliable deployments and audit compliance."
+                            }
+                        },
+                        { 
+                            id: "w10d2", 
+                            title: "Center of Excellence (CoE) & PL-400 Assessment", 
+                            topics: "CoE starter kit, security governance controls, PL-400 exam structures, practice simulation.", 
+                            lab: "Execute a full-scope mock certification exam mapping PL-400 core domains.", 
+                            interview: "Detail key responsibilities of the Center of Excellence (CoE) Starter Kit in enterprise tenants.", 
+                            flashcards: "CoE Kit: Collection of apps/flows managing platform inventory and usage statistics.<br>PL-400 Exam: Official assessment validating pro-dev extension architectures.", 
+                            learn: "https://learn.microsoft.com/en-us/training/paths/pl-400-alm-governance/",
+                            guide: {
+                                duration: "4 Hours",
+                                difficulty: "Intermediate",
+                                objective: "Test your knowledge of all core PL-400 domains under simulated exam conditions.",
+                                steps: [
+                                    "Review the PL-400 exam objectives and sub-domain distributions.",
+                                    "Access the official Microsoft PL-400 Practice Assessment tool on MS Learn.",
+                                    "Prepare a quiet study space and set a countdown timer to <b>120 minutes</b> (the standard exam duration).",
+                                    "Complete the assessment, making sure to review case study resources carefully.",
+                                    "Review your score report and focus your study on any areas that fell below 70%."
+                                ],
+                                mastery: "Study standard exam topologies. Pay special attention to complex case study scenarios—these require analyzing multi-tier database architectures under tight timeline constraints.",
+                                growth: "Establishes tenant wide-governance capabilities. Designing apps that respect Center of Excellence (CoE) policies helps protect enterprise tenants from sprawl and unauthorized data leakage."
+                            }
+                        }
+                    ]
+                }
+            ],
+            extraStudySPFx: {
+                title: "SharePoint Framework (SPFx) Companion",
+                days: [
+                    { 
+                        id: "spfx1", 
+                        title: "Client Web Part Customizations & Yeoman Workspace Setup", 
+                        topics: "Node environment configs, Gulp build cycles, Yeoman scaffolds, modern React client containers.", 
+                        lab: "Deploy a local SPFx workbench bundle displaying interactive data widgets.", 
+                        interview: "What modern UI performance benefits do SPFx client-side web parts yield over legacy server components?", 
+                        flashcards: "Yeoman: Scaffolding generator scripts.<br>Gulp: Automation task compilation loops.", 
+                        learn: "https://learn.microsoft.com/en-us/sharepoint/dev/spfx/set-up-your-development-environment",
+                        guide: {
+                            duration: "4 Hours",
+                            difficulty: "Advanced",
+                            objective: "Scaffold and compile modern client-side web parts using React.",
+                            steps: [
+                                "Ensure Node.js LTSC (v16/v18) is installed locally.",
+                                "Install Yeoman and the Yeoman SharePoint generator globally:<br><pre class='bg-slate-900 text-green-400 p-2.5 rounded font-mono text-xs mt-1.5 overflow-x-auto'>npm install -g yo @microsoft/generator-sharepoint</pre>",
+                                "Create a workspace directory and launch the scaffold wizard:<br><pre class='bg-slate-900 text-green-400 p-2.5 rounded font-mono text-xs mt-1.5 overflow-x-auto'>mkdir spfx-web-part\ncd spfx-web-part\nyo @microsoft/sharepoint</pre>",
+                                "Configure your project settings in the setup wizard &rarr; select WebPart and choose React as your framework.",
+                                "Once scaffolding is complete, compile your project: <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>gulp build</code>.",
+                                "Trust your local development SSL certificate:<br><pre class='bg-slate-900 text-green-400 p-2.5 rounded font-mono text-xs mt-1.5 overflow-x-auto'>gulp trust-dev-cert</pre>",
+                                "Start your local developer server to launch the testing workbench: <code class='text-red-600 bg-slate-100 px-1 rounded font-mono text-xs'>gulp serve</code>."
+                            ],
+                            mastery: "Keep Node environment aligned. Mixing incompatible Node versions (e.g. Node 20 with older SPFx build tools) will throw compilation and runtime task dependency errors.",
+                            growth: "Required for deep SharePoint customization. Building SPFx web parts provides developers with full control over the collaborative workspace user experience."
+                        }
+                    }
+                ]
+            },
+            interviewQuestions: [
+                { q: "Explain the architectural difference between Canvas Apps and Model-Driven Apps.", cat: "Power Platform", level: "Beginner", a: "<b>Canvas Apps</b> prioritize user experience, providing pixel-perfect design authority regardless of backend layouts. <b>Model-Driven Apps</b> focus on process optimization, deriving their layouts from underlying Dataverse entity networks automatically." },
+                { q: "How do you securely manage authentication when building custom API connectors?", cat: "Power Platform", level: "Intermediate", a: "Leverage enterprise authentication standards, primarily utilizing <b>OAuth 2.0</b> definitions registered safely inside Azure Active Directory, ensuring secure runtime connection tokens." },
+                { q: "Describe the execution sequence of methods inside the PCF control lifecycle.", cat: "Power Platform", level: "Advanced", a: "The sequence starts with <b>init</b> (initializing variables and HTML containers), followed by <b>updateView</b> (re-rendering elements based on state adjustments), and finishes with <b>destroy</b> (clearing memory/event hooks)." },
+                { q: "What is the primary role of Microsoft Copilot Studio inside modern application platforms?", cat: "Power Platform", level: "Advanced", a: "<b>Copilot Studio</b> acts as an enterprise conversational AI platform, allowing developers to configure custom topics, actions, and plugin triggers over internal data maps natively." }
+            ],
+            projects: [
+                { id: "p1", title: "Enterprise Resource Management Engine", desc: "Construct a unified data architecture handling internal tracking pipelines, security roles, and automated managed solution pipelines.", tech: "Dataverse, Power Apps, Azure DevOps, pac CLI",
+                  guide: [
+                    "Define system relational database mappings directly inside isolated sandbox environments.",
+                    "Generate administrative control loops using clean Model-Driven app designs.",
+                    "Build automated export loops tracking components smoothly into source repositories."
+                  ]},
+                { id: "p2", title: "Automated Incident Escalation Portal", desc: "Construct a flow-driven ticketing platform utilizing custom conditional logic triggers and SharePoint document attachments.", tech: "Power Automate, SharePoint Online, Canvas Apps, Teams",
+                  guide: [
+                    "Design modern SharePoint support queues with target urgency indexes.",
+                    "Develop custom cloud flows checking threshold variables automatically.",
+                    "Integrate interactive Teams adapt cards delivering live updates directly to users."
+                  ]}
+            ]
+        };
+
+        // Combine standard and extra study days into unified arrays for operations
+        const allDays = [];
+        trackerData.weeks.forEach(w => allDays.push(...w.days));
+        allDays.push(...trackerData.extraStudySPFx.days);
+
+        // State variables
+        let currentTab = 'dashboard';
+        let selectedWeekIndex = 0;
+        let selectedCategoryFilter = 'all';
+        let currentFlashcardIndex = 0;
+        let isFlashcardFlipped = false;
+        let flashcardGradeBook = {}; // ID to boolean
+        
+        // Progress State (load state, default to false)
+        let dayProgress = {};
+        allDays.forEach(day => {
+            dayProgress[day.id] = false;
+        });
+
+        // Pomodoro Timer State
+        let timerInterval = null;
+        let timerSecondsLeft = 25 * 60; // 25 minutes standard
+        let isTimerRunning = false;
+
+        // Custom Sound Synthesis Chime (Oscillator chime)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playChime(freq, type, duration) {
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {
+                console.debug('Audio error', e);
+            }
+        }
+
+        // Tab routing switcher
+        function switchTab(tabId) {
+            currentTab = tabId;
+            document.querySelectorAll('.tab-view').forEach(view => {
+                view.classList.add('hidden');
+            });
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            // Reset navigation highlights
+            document.querySelectorAll('aside nav text, aside nav button').forEach(btn => {
+                btn.className = "w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all";
+            });
+
+            const activeBtn = document.getElementById(`nav-${tabId}`);
+            if (activeBtn) {
+                activeBtn.className = "w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg text-sm font-medium bg-indigo-600 text-white transition-all";
+            }
+
+            // Sync Header Titles
+            const titleMap = {
+                dashboard: 'Dashboard Overview',
+                'weekly-schedule': 'Program Master Scheduler',
+                'interview-hub': 'Technical Scenario Hub',
+                flashcards: 'Active Recall Practice',
+                portfolio: 'Sandbox Code Portfolio'
+            };
+            document.getElementById('page-title').textContent = titleMap[tabId] || 'Mastery Portal';
+            
+            // Re-render components if needed
+            if (tabId === 'weekly-schedule') {
+                renderWeeklyTabs();
+                renderDays();
+                renderModuleChecklist();
+            } else if (tabId === 'flashcards') {
+                renderActiveFlashcard();
+            }
+
+            // Mobile sidebar autohide
+            if (window.innerWidth < 768) {
+                document.getElementById('sidebar').classList.add('-translate-x-full');
+            }
+        }
+
+        function toggleSidebarMobile() {
+            document.getElementById('sidebar').classList.toggle('-translate-x-full');
+        }
+
+        // Update dashboard and layout progress items
+        function updateProgress() {
+            const completedCount = Object.values(dayProgress).filter(Boolean).length;
+            const totalCount = allDays.length;
+            const progressPct = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+
+            // Update top progress indicators
+            document.getElementById('top-progress-fill').style.width = `${progressPct}%`;
+            document.getElementById('top-progress-pct').textContent = `${progressPct}%`;
+
+            // Dashboard stats
+            const statDays = document.getElementById('stat-completed-days');
+            if (statDays) {
+                statDays.textContent = `${completedCount} / ${totalCount}`;
+            }
+
+            // Update home active metrics status
+            const statStatus = document.getElementById('homeStatusLabel');
+            if (statStatus) {
+                if (progressPct === 100) {
+                    statStatus.textContent = "🏆 Master Developer";
+                } else if (progressPct > 50) {
+                    statStatus.textContent = "Advanced Solutions Active";
+                } else {
+                    statStatus.textContent = "Foundations Initiated";
+                }
+            }
+
+            // Update dashboard progress metrics
+            const dashCount = document.getElementById('homeCompleteCount');
+            if (dashCount) dashCount.textContent = completedCount;
+        }
+
+        // Timer management
+        function toggleTimer() {
+            if (isTimerRunning) {
+                clearInterval(timerInterval);
+                isTimerRunning = false;
+                document.getElementById('timer-status').textContent = "Session Paused";
+                document.getElementById('timer-status').className = "text-[10px] font-medium text-amber-600";
+                document.getElementById('timer-icon').innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>';
+            } else {
+                audioCtx.resume();
+                timerInterval = setInterval(() => {
+                    timerSecondsLeft--;
+                    if (timerSecondsLeft <= 0) {
+                        clearInterval(timerInterval);
+                        isTimerRunning = false;
+                        timerSecondsLeft = 25 * 60; // Reset
+                        playChime(523.25, 'triangle', 0.8); // C5 chime completion
+                        setTimeout(() => playChime(659.25, 'triangle', 0.8), 200); // E5
+                        appNotify("Focus Interval Complete! Enjoy a short break.", "success");
+                    }
+                    updateTimerDisplay();
+                }, 1000);
+                isTimerRunning = true;
+                document.getElementById('timer-status').textContent = "Interval Active";
+                document.getElementById('timer-status').className = "text-[10px] font-medium text-emerald-600";
+                document.getElementById('timer-icon').innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.75 5.25v13.5m-7.5-13.5v13.5"/>';
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            timerSecondsLeft = 25 * 60;
+            updateTimerDisplay();
+            document.getElementById('timer-status').textContent = "Session Reset";
+            document.getElementById('timer-status').className = "text-[10px] font-medium text-slate-500";
+            document.getElementById('timer-icon').innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>';
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timerSecondsLeft / 60);
+            const seconds = timerSecondsLeft % 60;
+            const timeStr = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            document.getElementById('timer-display').textContent = timeStr;
+            const dashLabel = document.getElementById('stat-timer-label');
+            if (dashLabel) dashLabel.textContent = timeStr;
+        }
+
+        // Render week selection tabs
+        function renderWeeklyTabs() {
+            const container = document.getElementById('weeks-header-container');
+            container.innerHTML = '';
+
+            trackerData.weeks.forEach((week, index) => {
+                const btn = document.createElement('button');
+                btn.className = `px-3 py-2 text-xs font-semibold rounded-lg shrink-0 transition-all ${selectedWeekIndex === index ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`;
+                btn.textContent = `Week ${index + 1}`;
+                btn.onclick = () => {
+                    selectedWeekIndex = index;
+                    renderWeeklyTabs();
+                    renderDays();
+                };
+                container.appendChild(btn);
+            });
+
+            // Extra study SPFx Tab button
+            const extraBtn = document.createElement('button');
+            extraBtn.className = `px-3 py-2 text-xs font-semibold rounded-lg shrink-0 transition-all ${selectedWeekIndex === 'spfx' ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`;
+            extraBtn.textContent = `SPFx Extension`;
+            extraBtn.onclick = () => {
+                selectedWeekIndex = 'spfx';
+                renderWeeklyTabs();
+                renderDays();
+            };
+            container.appendChild(extraBtn);
+        }
+
+        // Render detailed day checklists
+        function renderDays() {
+            const container = document.getElementById('days-container');
+            container.innerHTML = '';
+
+            let daysToRender = [];
+            let focusArea = '';
+            if (selectedWeekIndex === 'spfx') {
+                daysToRender = trackerData.extraStudySPFx.days;
+                focusArea = "SharePoint Framework";
+                document.getElementById('planWeekTitle').textContent = trackerData.extraStudySPFx.title;
+            } else {
+                const week = trackerData.weeks[selectedWeekIndex];
+                daysToRender = week.days;
+                focusArea = week.focus;
+                document.getElementById('planWeekTitle').textContent = week.title;
+            }
+            document.getElementById('planWeekFocus').textContent = `Target Domain Focus: ${focusArea}`;
+
+            daysToRender.forEach((day, index) => {
+                const isChecked = dayProgress[day.id] === true;
+                const card = document.createElement('div');
+                card.className = `bg-white p-5 rounded-xl border transition-all ${isChecked ? 'border-indigo-100 bg-indigo-50/10' : 'border-slate-200'}`;
+                
+                const learnUrl = day.learn || "https://learn.microsoft.com/en-us/credentials/certifications/power-platform-developer-associate/";
+
+                // Dynamic Lab guide button injecting details
+                const labBtnHtml = day.guide ? `
+                    <button onclick="openLabDrawer('${day.id}')" class="mt-3 inline-flex items-center space-x-1.5 bg-slate-900 hover:bg-slate-800 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition-all">
+                        <span>🛠️ View Lab Guide</span>
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                ` : '';
+
+                card.innerHTML = `
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-start space-x-4">
+                            <button onclick="toggleDayProgress('${day.id}')" class="mt-0.5 p-1 hover:bg-slate-100 rounded transition flex items-center justify-center">
+                                <div class="w-5 h-5 rounded border-2 flex items-center justify-center transition ${isChecked ? 'bg-indigo-600 border-indigo-600 text-white' : 'border-slate-300 bg-white'}">
+                                    ${isChecked ? '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>' : ''}
+                                </div>
+                            </button>
+                            <div>
+                                <h4 class="text-sm font-bold ${isChecked ? 'text-slate-500 line-through' : 'text-slate-900'}">${day.title}</h4>
+                                <p class="text-xs text-slate-500 mt-1 leading-relaxed"><span class="font-bold text-slate-700">Topic Scope:</span> ${day.topics}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 pt-4 border-t border-slate-100 border-dashed text-xs">
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+                            <span class="font-bold text-slate-800 block mb-1">💻 Sandbox Lab Task</span>
+                            <p class="text-slate-600 leading-relaxed">${day.lab}</p>
+                            ${labBtnHtml}
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+                            <span class="font-bold text-slate-800 block mb-1">❓ Targeted Scenario</span>
+                            <p class="text-slate-600 leading-relaxed">${day.interview}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-100 text-xs">
+                        <a href="${learnUrl}" target="_blank" class="text-indigo-600 font-bold hover:underline inline-flex items-center space-x-1">
+                            <span>Open MS Learn Path</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                        </a>
+                        <span class="text-[10px] font-mono text-slate-400 font-medium">Identifier: ${day.id}</span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Slide-over Lab manual drawer actions with enriched metrics (Duration, Pits, Growth)
+        window.openLabDrawer = function(dayId) {
+            const day = allDays.find(d => d.id === dayId);
+            if (!day || !day.guide) return;
+
+            const drawer = document.getElementById('lab-drawer');
+            const backdrop = document.getElementById('drawer-backdrop');
+            const drawerTitle = document.getElementById('drawer-title');
+            const drawerContent = document.getElementById('drawer-content');
+
+            drawerTitle.textContent = day.title;
+
+            // Mapping color badges based on difficulty settings
+            const difficultyBadgeColors = {
+                "Beginner": "bg-emerald-50 text-emerald-700 border-emerald-200",
+                "Intermediate": "bg-amber-50 text-amber-700 border-amber-200",
+                "Advanced": "bg-rose-50 text-rose-700 border-rose-200"
+            };
+            const activeColorClass = difficultyBadgeColors[day.guide.difficulty] || "bg-slate-50 text-slate-700 border-slate-200";
+
+            // Generate structured checkbox items
+            let stepsHtml = '';
+            day.guide.steps.forEach((step, idx) => {
+                const uniqueId = `step_${dayId}_${idx}`;
+                stepsHtml += `
+                    <div class="flex items-start space-x-3 bg-white p-3 py-3.5 rounded-xl border border-slate-200 shadow-xs">
+                        <input type="checkbox" id="${uniqueId}" class="mt-1 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500">
+                        <label for="${uniqueId}" class="text-xs text-slate-700 leading-relaxed cursor-pointer select-none">
+                            ${step}
+                        </label>
+                    </div>
+                `;
+            });
+
+            // Enriched details Injection
+            drawerContent.innerHTML = `
+                <div class="space-y-5">
+                    <!-- Metadata Header Cards -->
+                    <div class="grid grid-cols-2 gap-3 shrink-0">
+                        <div class="bg-white border border-slate-200 p-3 rounded-xl flex flex-col justify-between">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Duration</span>
+                            <span class="text-xs font-semibold text-slate-700 mt-1 flex items-center space-x-1">
+                                <span>⏱️</span> <span>${day.guide.duration}</span>
+                            </span>
+                        </div>
+                        <div class="bg-white border border-slate-200 p-3 rounded-xl flex flex-col justify-between">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Difficulty Profile</span>
+                            <span class="text-xs font-semibold px-2 py-0.5 rounded border ${activeColorClass} mt-1 inline-block self-start text-[10px]">
+                                ${day.guide.difficulty}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Sandbox Objective -->
+                    <div class="bg-indigo-50 border border-indigo-150 p-4 rounded-xl">
+                        <span class="text-[10px] font-bold text-indigo-600 uppercase tracking-wider block">Lab Objective</span>
+                        <p class="text-xs text-slate-700 font-medium mt-1 leading-relaxed">${day.guide.objective}</p>
+                    </div>
+
+                    <!-- Steps Panel -->
+                    <div class="space-y-2.5">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Core Execution Steps</span>
+                        ${stepsHtml}
+                    </div>
+
+                    <!-- Mastery, Pits & Enterprise Scaling -->
+                    <div class="border-t border-slate-200 pt-5 space-y-4">
+                        <div class="bg-amber-50/50 border border-amber-200 p-4 rounded-xl">
+                            <span class="text-[10px] font-bold text-amber-800 uppercase tracking-wider block">🔑 Key Mastery Rules & Avoidable Pitfalls</span>
+                            <p class="text-xs text-slate-700 mt-1 leading-relaxed font-light">${day.guide.mastery}</p>
+                        </div>
+
+                        <div class="bg-emerald-50/50 border border-emerald-200 p-4 rounded-xl">
+                            <span class="text-[10px] font-bold text-emerald-800 uppercase tracking-wider block">🚀 Real-World Growth & Enterprise Scaling</span>
+                            <p class="text-xs text-slate-700 mt-1 leading-relaxed font-light">${day.guide.growth}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            backdrop.classList.remove('hidden');
+            setTimeout(() => {
+                drawer.classList.remove('translate-x-full');
+            }, 10);
+            playChime(660, 'sine', 0.15); // drawer open note chime
+        };
+
+        window.closeLabDrawer = function() {
+            const drawer = document.getElementById('lab-drawer');
+            const backdrop = document.getElementById('drawer-backdrop');
+
+            drawer.classList.add('translate-x-full');
+            setTimeout(() => {
+                backdrop.classList.add('hidden');
+            }, 300);
+            playChime(330, 'sine', 0.1); // soft drawer close chime
+        };
+
+        // Toggle day progression checkbox
+        function toggleDayProgress(dayId) {
+            dayProgress[dayId] = !dayProgress[dayId];
+            playChime(dayProgress[dayId] ? 587.33 : 293.66, 'sine', 0.25); // high chirp on check / low chirp on uncheck
+            updateProgress();
+            renderDays();
+            renderModuleChecklist();
+        }
+
+        // Update module checklist sidebar
+        function renderModuleChecklist() {
+            const container = document.getElementById('module-progress-checklist');
+            container.innerHTML = '';
+
+            const categories = ["Environments & Dataverse", "Low-Code Apps & Logic", "Pro-Code Extensions (PCF)", "Integrations & Automation", "ALM & Exam Prep"];
+            categories.forEach(cat => {
+                const matchingDays = allDays.filter(d => {
+                    const matchedWeek = trackerData.weeks.find(w => w.days.some(day => day.id === d.id));
+                    return matchedWeek && matchedWeek.focus === cat;
+                });
+                
+                const completed = matchingDays.filter(d => dayProgress[d.id] === true).length;
+                const total = matchingDays.length;
+                const progressPct = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+                const row = document.createElement('div');
+                row.className = "flex flex-col space-y-1";
+                row.innerHTML = `
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="font-medium text-slate-700 text-[11px]">${cat}</span>
+                        <span class="font-bold text-slate-900 font-mono">${completed} / ${total}</span>
+                    </div>
+                    <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-indigo-600 h-full transition-all duration-300" style="width: ${progressPct}%"></div>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        // Filters category selection row
+        function renderInterviewFilters() {
+            const container = document.getElementById('interview-category-filters');
+            container.innerHTML = '';
+            
+            const cats = ["all", "Power Platform", "SharePoint"];
+            cats.forEach(cat => {
+                const btn = document.createElement('button');
+                const isSelected = selectedCategoryFilter === cat;
+                btn.className = `px-4 py-1.5 text-xs font-semibold rounded-full border shrink-0 transition-all ${isSelected ? 'bg-indigo-600 border-indigo-600 text-white shadow-sm' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}`;
+                btn.textContent = cat === 'all' ? 'All Questions' : cat;
+                btn.onclick = () => {
+                    selectedCategoryFilter = cat;
+                    renderInterviewFilters();
+                    renderInterviewQuestions();
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        // Render interview question tiles
+        function renderInterviewQuestions() {
+            const container = document.getElementById('questions-grid');
+            container.innerHTML = '';
+
+            const searchTerm = document.getElementById('interview-search').value.toLowerCase();
+
+            const questions = trackerData.interviewQuestions.filter(q => {
+                const matchCat = selectedCategoryFilter === 'all' || q.cat === selectedCategoryFilter;
+                const matchText = q.q.toLowerCase().includes(searchTerm) || q.a.toLowerCase().includes(searchTerm);
+                return matchCat && matchText;
+            });
+
+            if (questions.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full py-12 text-center text-xs text-slate-400">
+                        No scenarios found matching current filtering settings.
+                    </div>
+                `;
+                return;
+            }
+
+            questions.forEach((q, idx) => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3 flex flex-col justify-between";
+                
+                card.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-full">${q.cat}</span>
+                            <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">${q.level}</span>
+                        </div>
+                        <h4 class="text-sm font-semibold text-slate-900">${q.q}</h4>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <button onclick="revealInterviewAnswer(this)" class="text-xs text-indigo-600 font-bold hover:underline">Reveal Answer</button>
+                    </div>
+                    <div class="answer-reveal-pane hidden mt-3 p-4 bg-slate-50 border-l-4 border-indigo-600 rounded text-xs text-slate-600 leading-relaxed">
+                        ${q.a}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterInterviewQuestions() {
+            renderInterviewQuestions();
+        }
+
+        window.revealInterviewAnswer = function(btn) {
+            const pane = btn.closest('.space-y-3').querySelector('.answer-reveal-pane');
+            if (pane.classList.contains('hidden')) {
+                pane.classList.remove('hidden');
+                btn.textContent = "Hide Answer";
+            } else {
+                pane.classList.add('hidden');
+                btn.textContent = "Reveal Answer";
+            }
+        };
+
+        // Render selected card view
+        function renderActiveFlashcard() {
+            const count = allDays.length;
+            const card = allDays[currentFlashcardIndex];
+            
+            document.getElementById('flashcard-index').textContent = `${currentFlashcardIndex + 1} / ${count}`;
+            document.getElementById('fc-category').textContent = `Deck Day ${currentFlashcardIndex + 1}`;
+            
+            // Front side properties
+            document.getElementById('fc-question-text').innerHTML = `
+                <div class="space-y-2">
+                    <p class="text-xs text-slate-400 font-mono tracking-widest uppercase">Target Focus Area</p>
+                    <p class="text-sm font-bold text-slate-800">${card.title}</p>
+                    <p class="text-xs text-indigo-600 mt-2 font-medium">Verify: "${card.interview}"</p>
+                </div>
+            `;
+
+            // Back side properties
+            document.getElementById('fc-answer-text').innerHTML = `
+                <div class="space-y-3 text-left">
+                    <div>
+                        <span class="font-bold text-cyan-400 block text-[11px] mb-1">Ecosystem Standard Answers</span>
+                        <p class="text-xs leading-relaxed text-slate-200">${card.flashcards}</p>
+                    </div>
+                    <div class="bg-slate-800 p-2.5 rounded border border-slate-700">
+                        <span class="font-bold text-slate-400 block text-[10px] mb-0.5">Recommended Lab Practice</span>
+                        <p class="text-[11px] text-slate-300 leading-relaxed">${card.lab}</p>
+                    </div>
+                </div>
+            `;
+
+            // Reset Flipping layout state smoothly
+            document.getElementById('flashcard').classList.remove('flipped');
+            isFlashcardFlipped = false;
+        }
+
+        // Flip active recall container
+        function flipActiveCard() {
+            const element = document.getElementById('flashcard');
+            isFlashcardFlipped = !isFlashcardFlipped;
+            if (isFlashcardFlipped) {
+                element.classList.add('flipped');
+            } else {
+                element.classList.remove('flipped');
+            }
+        }
+
+        function cycleFlashcard(dir) {
+            const count = allDays.length;
+            currentFlashcardIndex = (currentFlashcardIndex + dir + count) % count;
+            renderActiveFlashcard();
+        }
+
+        function gradeCard(status) {
+            const card = allDays[currentFlashcardIndex];
+            flashcardGradeBook[card.id] = status;
+            appNotify(status ? "Perfect Recall Marked!" : "Card Saved For Review Pipeline.", "info");
+            cycleFlashcard(1);
+        }
+
+        // Render project tracking tiles
+        function renderProjects() {
+            const container = document.getElementById('portfolio-grid');
+            container.innerHTML = '';
+
+            trackerData.projects.forEach((proj, idx) => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4";
+                
+                let stepsHtml = '';
+                proj.guide.forEach((step, stepIdx) => {
+                    const storageKey = `proj_${proj.id}_step_${stepIdx}`;
+                    const isChecked = localStorage.getItem(storageKey) === 'true'; // simple portfolio step persistence
+                    
+                    stepsHtml += `
+                        <div class="flex items-start space-x-3 text-xs leading-relaxed text-slate-600">
+                            <input type="checkbox" id="${storageKey}" onchange="toggleProjectStep('${proj.id}', ${stepIdx}, this)" ${isChecked ? 'checked' : ''} class="mt-0.5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500">
+                            <label for="${storageKey}" class="${isChecked ? 'line-through text-slate-400' : 'text-slate-600'} select-none cursor-pointer">${step}</label>
+                        </div>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full uppercase tracking-wider">Enterprise Portfolio Target</span>
+                            <h4 class="text-base font-bold text-slate-900 mt-2">${proj.title}</h4>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">${proj.desc}</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg space-y-3 border border-slate-200">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Phased Construction Checklist</span>
+                        <div class="space-y-2.5">
+                            ${stepsHtml}
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-slate-100">
+                        <span>Stack: ${proj.tech}</span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        window.toggleProjectStep = function(projId, stepIdx, checkbox) {
+            localStorage.setItem(`proj_${projId}_step_${stepIdx}`, checkbox.checked);
+            playChime(checkbox.checked ? 440 : 220, 'sine', 0.15); // soft focus note chime
+            renderProjects();
+        };
+
+        // Render syllabus breakdown inside Chart.js Canvas
+        let focusChartObj = null;
+        function renderSyllabusChart() {
+            const ctx = document.getElementById('dashboardFocusChart').getContext('2d');
+            
+            const counts = {};
+            trackerData.weeks.forEach(w => {
+                counts[w.focus] = (counts[w.focus] || 0) + 1;
+            });
+            counts["SharePoint Framework"] = 1; // extra study
+
+            if (focusChartObj) focusChartObj.destroy();
+
+            focusChartObj = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(counts),
+                    datasets: [{
+                        data: Object.values(counts),
+                        backgroundColor: [
+                            'rgba(99, 102, 241, 0.8)', // Indigo
+                            'rgba(6, 182, 212, 0.8)',  // Cyan
+                            'rgba(16, 185, 129, 0.8)',  // Emerald
+                            'rgba(245, 158, 11, 0.8)',  // Amber
+                            'rgba(100, 116, 139, 0.8)'  // Slate
+                        ],
+                        borderWidth: 1,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 10,
+                                font: { size: 9 }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Global Alert utility
+        function appNotify(msg, type = "success") {
+            const banner = document.getElementById('notifyBanner');
+            const text = document.getElementById('notifyBannerText');
+            
+            // Defensively handle missing DOM elements to prevent Javascript runtime crashes
+            if (!banner || !text) {
+                console.warn("Notification elements are missing from the DOM:", msg);
+                return;
+            }
+            
+            text.textContent = msg;
+            
+            if (type === "success") {
+                banner.className = "fixed top-16 left-1/2 transform -translate-x-1/2 bg-emerald-600 text-white px-6 py-3 rounded-xl shadow-xl text-xs font-semibold z-50 flex items-center space-x-2.5 opacity-100 transition-all duration-300";
+            } else {
+                banner.className = "fixed top-16 left-1/2 transform -translate-x-1/2 bg-indigo-600 text-white px-6 py-3 rounded-xl shadow-xl text-xs font-semibold z-50 flex items-center space-x-2.5 opacity-100 transition-all duration-300";
+            }
+
+            setTimeout(() => {
+                banner.className = banner.className.replace('opacity-100', 'opacity-0 pointer-events-none');
+            }, 3500);
+        }
+
+        // Boot
+        window.onload = function() {
+            renderSyllabusChart();
+            renderWeeklyTabs();
+            renderInterviewFilters();
+            renderInterviewQuestions();
+            renderProjects();
+            updateProgress();
+            updateTimerDisplay();
+        };
+    </script>
+</body>
+</html>
