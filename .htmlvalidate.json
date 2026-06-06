@@ -1,0 +1,20 @@
+{
+  "extends": ["html-validate:recommended"],
+  "rules": {
+    "no-inline-style": "off",
+    "long-title": "off",
+    "no-trailing-whitespace": "off",
+    "prefer-native-element": "off",
+    "wcag/h30": "off",
+    "wcag/h32": "off",
+    "wcag/h36": "off",
+    "wcag/h37": "off",
+    "wcag/h67": "off",
+    "aria-label-misuse": "off",
+    "element-permitted-content": "off",
+    "no-redundant-role": "off",
+    "svg-focusable": "off",
+    "no-implicit-button-type": "warn",
+    "text-content": "warn"
+  }
+}

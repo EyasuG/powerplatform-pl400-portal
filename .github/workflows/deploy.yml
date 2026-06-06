@@ -28,7 +28,7 @@ jobs:
         run: npm install -g html-validate
 
       - name: Lint HTML
-        run: html-validate index.html --config '{"extends":["html-validate:recommended"],"rules":{"no-inline-style":"off","long-title":"off"}}'
+        run: html-validate index.html
 
   # ── Deploy to GitHub Pages ─────────────────────────────────────────────────
   deploy:
